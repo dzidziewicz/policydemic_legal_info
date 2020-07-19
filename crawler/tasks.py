@@ -3,7 +3,7 @@ import csv
 import os
 from pathlib import Path
 
-import CGRT
+from .CGRT import CGRT
 import requests
 from billiard.context import Process
 from scrapy import signals
