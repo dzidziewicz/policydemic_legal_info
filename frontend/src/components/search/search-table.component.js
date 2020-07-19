@@ -356,7 +356,7 @@ export default function EnhancedTable(props) {
                                             role="checkbox"
                                             aria-checked={isItemSelected}
                                             tabIndex={-1}
-                                            key={row.id}
+                                            key={row["id"]}
                                             selected={isItemSelected}
                                         >
                                             <TableCell padding="checkbox">
@@ -365,13 +365,11 @@ export default function EnhancedTable(props) {
                                                     inputProps={{ 'aria-labelledby': labelId }}
                                                 />
                                             </TableCell>
-                                            <TableCell component="th" id={labelId} scope="row" padding="none">
-                                                {row.source}
-                                            </TableCell>
-                                            <TableCell align="right">{row.infoDate.toLocaleDateString("en-US")}</TableCell>
-                                            <TableCell align="right">{row.language}</TableCell>
-                                            <TableCell align="right">{row.keywords}</TableCell>
-                                            <TableCell align="right">{row.country}</TableCell>
+                                            <TableCell component="th" id={labelId} scope="row" padding="none"> {row["source"]}</TableCell>
+                                            <TableCell align="right">{row["infoDate"]}</TableCell>
+                                            <TableCell align="right">{row["language"]}</TableCell>
+                                            <TableCell align="right">{row["keywords"].join(", ")}</TableCell>
+                                            <TableCell align="right">{row["country"]}</TableCell>
                                             <TableCell align="right">
                                                 <Tooltip title="Edit">
                                                     <IconButton aria-label="edit" onClick={(event) => { event.stopPropagation(); onEdit(row.id); }}>

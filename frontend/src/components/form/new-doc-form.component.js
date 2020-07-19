@@ -12,7 +12,6 @@ import Api from "../../common/api";
 import AsyncAutocomplete from "./async-autocomplete.component";
 import UploadPdfComponent from './upload-pdf.component';
 
-
 export default function NewDocFormComponent({ document, type, onSuccessfulSend }) {
     const pdfUpload = type === "LAD";
     const [infoDate, setInfoDate] = React.useState(document ? document.infoDate : undefined);
@@ -20,11 +19,11 @@ export default function NewDocFormComponent({ document, type, onSuccessfulSend }
 
     const handleInfoDateChange = (date) => {
         setInfoDate(date);
-        setValue("infoDate", date.toISOString());
+        setValue("infoDate", Api.dateToYMD(date));
     };
     const handleScrapDateChange = (date) => {
         setScrapDate(date);
-        setValue("scrapDate", date.toISOString());
+        setValue("scrapDate", Api.dateToYMD(date));
     };
 
     const { register, handleSubmit, setValue } = useForm({
@@ -180,7 +179,6 @@ export default function NewDocFormComponent({ document, type, onSuccessfulSend }
                             <AsyncAutocomplete
                                 name="language"
                                 collectionName="languages"
-                                inputRef={register}
                                 style={{ width: 300 }}
                                 openOnFocus
                                 onChange={(_, opt) => setValue("language", opt.value)}
@@ -199,7 +197,6 @@ export default function NewDocFormComponent({ document, type, onSuccessfulSend }
                             <AsyncAutocomplete
                                 name="translationType"
                                 collectionName="translationTypes"
-                                inputRef={register}
                                 style={{ width: 300 }}
                                 openOnFocus
                                 onChange={(_, opt) => setValue("translationType", opt.value)}
