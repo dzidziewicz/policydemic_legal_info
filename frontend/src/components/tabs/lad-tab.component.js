@@ -18,10 +18,14 @@ export default function LadTabComponent() {
 
     const handleSearch = (formData) => {
 
-        Api.getSearchResults("SSD", formData).then((resp) => 
-        {
-            setSearchResults(resp);
-        });
+        Api.getSearchResults("LAD", formData).then(
+            (resp) => {
+                setSearchResults(resp);
+            },
+            (err) => {
+                console.error(err);
+            }
+        );
     }
 
     const handleReset = () => {
@@ -49,7 +53,7 @@ export default function LadTabComponent() {
             )
         }
         <SearchResultsListComponent
-            headerCaption="LAD"
+            headerCaption="Legal act documents"
             onAddNewItemClick={handleOpenDialog}
             onEdit={documentId => setEditedDocumentId(documentId)}
             onDelete={handleOnDelete}

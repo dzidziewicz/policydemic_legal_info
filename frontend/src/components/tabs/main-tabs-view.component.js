@@ -12,6 +12,10 @@ import LadTabComponent from './lad-tab.component.js';
 import SsdTabComponent from './ssd-tab.component.js';
 import CrawlerConfigComponent from './crawler-config-tab.component.js';
 
+import MotorcycleIcon from '@material-ui/icons/Motorcycle';
+import DescriptionIcon from '@material-ui/icons/Description';
+import GavelIcon from '@material-ui/icons/Gavel';
+
 // https://material-ui.com/components/tabs/
 
 function TabPanel(props) {
@@ -74,10 +78,10 @@ export default function MainTabs() {
   return (
     <div className={classes.root}>
       <AppBar position="static">
-        <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
-          <Tab label="LAD" {...a11yProps(0)} />
-          <Tab label="SSD" {...a11yProps(1)} />
-          <Tab label="CRAWLER CONFIG" {...a11yProps(2)} />
+        <Tabs value={value} onChange={handleChange} centered>
+          <Tab label={<div><GavelIcon style={{verticalAlign: 'middle'}} />  LEGAL ACT DOCUMENTS</div>} {...a11yProps(0)} />
+          <Tab label={<div><DescriptionIcon style={{verticalAlign: 'middle'}} />  SECONDARY DOCUMENTS</div>} {...a11yProps(1)} />
+          <Tab label={<div><MotorcycleIcon style={{verticalAlign: 'middle'}} />  CRAWLER CONFIG</div>} {...a11yProps(2)} />
         </Tabs>
       </AppBar>
       <SwipeableViews

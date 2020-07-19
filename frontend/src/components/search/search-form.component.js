@@ -12,36 +12,31 @@ import DateFnsUtils from '@date-io/date-fns';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import AsyncAutocomplete from '../form/async-autocomplete.component';
+import Api from '../../common/api';
 
 export default function SearchFormComponent({ type, onSearch, onReset }) {
 
     const aWeekAgo = new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000)
+    const now = new Date();
 
     const [selectedDateFrom, setSelectedDateFrom] = React.useState(aWeekAgo);
     const handleChangeDateFrom = (date) => {
         setSelectedDateFrom(date);
-        setValue("dateTo", date.toISOString());
+
+        if(date)
+            setValue("infoDateFrom", Api.dateToYMD(date));
+        else
+            setValue("infoDateFrom", "");
     };
 
-    const [selectedDateTo, setSelectedDateTo] = React.useState(new Date());
+    const [selectedDateTo, setSelectedDateTo] = React.useState(now);
     const handleChangeDateTo = (date) => {
         setSelectedDateTo(date);
-        setValue("dateFrom", date.toISOString());
-    };
 
-    const onResetClicked = (event) => {
-
-        setSelectedDateFrom(aWeekAgo);
-        setSelectedDateTo(new Date());
-        
-        // setValue("web-page", []);
-        // setValue("language", []);
-        // setValue("country", []);
-        // setValue("any-phrase", "");
-
-        document.getElementById("search-form").reset();
-
-        onReset();
+        if(date)
+            setValue("infoDateTo", Api.dateToYMD(date));
+        else
+            setValue("infoDateTo", "");
     };
 
     const onSubmit = useCallback(data => {
@@ -51,7 +46,51 @@ export default function SearchFormComponent({ type, onSearch, onReset }) {
 
     }, [type])
 
-    const { register, handleSubmit, setValue } = useForm();
+    const defaultFormValues = {
+        web_page: [],
+        country: [],
+        language: [],
+        keywords: "",
+        infoDateFrom: Api.dateToYMD(aWeekAgo),
+        infoDateTo: Api.dateToYMD(now)
+    };
+
+    const { register, handleSubmit, setValue, reset } = useForm({
+        defaultValues: defaultFormValues
+    });
+
+    const onResetClicked = (event) => {
+
+        setSelectedDateFrom(aWeekAgo);
+        setSelectedDateTo(new Date());
+
+        //clear auto-complete
+        const clearButtonsElements = document.getElementsByClassName("MuiAutocomplete-clearIndicator");
+        for(const buttonElement of clearButtonsElements) {
+            buttonElement.click();
+        }
+        
+        setTimeout(function() {
+            const searchFormElement = document.getElementById("search-form");
+            searchFormElement.reset();
+            searchFormElement.click();
+        }, 100);
+
+        reset(defaultFormValues);
+
+        onReset();
+    };
+
+    useEffect(() => {
+
+        register({ name: "web_page"  });
+        register({ name: "country" });
+        register({ name: "language" });
+        register({ name: "keywords" });
+        register({ name: "infoDateFrom" });
+        register({ name: "infoDateTo" });
+
+    }, [register])
 
     return (
         <form id="search-form" onSubmit={handleSubmit(onSubmit)}>
@@ -73,7 +112,8 @@ export default function SearchFormComponent({ type, onSearch, onReset }) {
                             variant="inline"
                             format="MM/dd/yyyy"
                             margin="normal"
-                            id="info-date-from"
+                            id="infoDateFrom"
+                            name="infoDateFrom"
                             label="Info date from"
                             onChange={handleChangeDateFrom}
                             value={selectedDateFrom}
@@ -89,6 +129,7 @@ export default function SearchFormComponent({ type, onSearch, onReset }) {
                             margin="normal"
                             id="info-date-to"
                             label="Info date to"
+                            name="infoDateTo"
                             onChange={handleChangeDateTo}
                             value={selectedDateTo}
                             KeyboardButtonProps={{
@@ -96,11 +137,10 @@ export default function SearchFormComponent({ type, onSearch, onReset }) {
                             }}
                         />
 
-                        {/* TODO: https://material-ui.com/components/autocomplete/#asynchronous-requests */}
-
                         <AsyncAutocomplete
-                            name="web-pages"
+                            name="web_page"
                             collectionName="webpages"
+                            id="web_page"
                             style={{ width: 300 }}
                             openOnFocus
                             fullWidth
@@ -108,13 +148,15 @@ export default function SearchFormComponent({ type, onSearch, onReset }) {
                             renderInput={(params) =>
                                 <TextField
                                     {...params}
+                                    inputRef={register}
                                     label="Web page" margin="normal" />}
-                            onChange={(_, opts) => setValue("web-page", opts.map(o => o.value).join(','))}
+                            onChange={(_, opts) => setValue("web_page", opts.map(o => o.value))}
                         />
 
                         <AsyncAutocomplete
-                            name="languages"
+                            name="language"
                             collectionName="languages"
+                            id="language"
                             style={{ width: 300 }}
                             openOnFocus
                             fullWidth
@@ -122,13 +164,15 @@ export default function SearchFormComponent({ type, onSearch, onReset }) {
                             renderInput={(params) =>
                                 <TextField
                                     {...params}
+                                    inputRef={register}
                                     label="Language" margin="normal" />}
-                            onChange={(_, opts) => setValue("language", opts.map(o => o.value).join(','))}
+                            onChange={(_, opts) => setValue("language", opts.map(o => o.value))}
                         />
 
                         <AsyncAutocomplete
                             name="country"
                             collectionName="countries"
+                            id="country"
                             style={{ width: 300 }}
                             openOnFocus
                             fullWidth
@@ -136,15 +180,17 @@ export default function SearchFormComponent({ type, onSearch, onReset }) {
                             renderInput={(params) =>
                                 <TextField
                                     {...params}
+                                    inputRef={register}
                                     label="Country" margin="normal" />}
-                            onChange={(_, opts) => setValue("country", opts.map(o => o.value).join(','))}
+                            onChange={(_, opts) => setValue("country", opts.map(o => o.value))}
                         />
 
                         <TextField
                             name="any-phrase"
                             label="Any phrase"
                             margin="normal"
-                            onChange={(event) => setValue("any-phrase", event.value)}
+                            inputRef={register}
+                            onChange={(event) => setValue("keywords", event.value)}
                         />
 
                     </Grid>

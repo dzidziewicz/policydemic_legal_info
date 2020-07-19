@@ -18,10 +18,13 @@ export default function SsdTabComponent() {
 
     const handleSearch = (formData) => {
 
-        Api.getSearchResults("SSD", formData).then((resp) => 
-        {
-            setSearchResults(resp);
-        });
+        Api.getSearchResults("SSD", formData).then(
+            (resp) => {
+                setSearchResults(resp);
+            },
+            (err) => {
+                console.error(err);
+            });
     }
 
     const handleReset = () => {
@@ -48,7 +51,7 @@ export default function SsdTabComponent() {
             )
         }
         <SearchResultsListComponent
-            headerCaption="SSD"
+            headerCaption="Secondary documents"
             onAddNewItemClick={handleOpenDialog}
             onEdit={documentId => setEditedDocumentId(documentId)}
             searchResultsList={searchResults}
