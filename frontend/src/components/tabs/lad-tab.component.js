@@ -20,7 +20,7 @@ export default function LadTabComponent() {
 
         Api.getSearchResults("LAD", formData).then(
             (resp) => {
-                setSearchResults(resp);
+                setSearchResults(resp.data);
             },
             (err) => {
                 console.error(err);

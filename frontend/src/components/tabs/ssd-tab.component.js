@@ -20,7 +20,7 @@ export default function SsdTabComponent() {
 
         Api.getSearchResults("SSD", formData).then(
             (resp) => {
-                setSearchResults(resp);
+                setSearchResults(resp.data);
             },
             (err) => {
                 console.error(err);
