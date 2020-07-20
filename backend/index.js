@@ -46,6 +46,7 @@ router.get("/autocomplete/languages", (ctx) => {
     { name: "English", value: "English" },
     { name: "Chinese", value: "Chinese" },
     { name: "Italian", value: "Italian" },
+    {name: "German", value: "German"},
   ]);
 });
 
@@ -53,6 +54,8 @@ router.get("/autocomplete/keywords", (ctx) => {
   ctx.body = JSON.stringify([
     { name: "School Closing", value: "School Closing" },
     { name: "Shopping restrictions", value: "Shopping restrictions" },
+    {name: "test_kw", value: "test_kw"},
+    {name: "cowid", value: "bulk"},
   ]);
 });
 
