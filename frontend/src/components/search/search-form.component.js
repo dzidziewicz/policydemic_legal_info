@@ -50,7 +50,7 @@ export default function SearchFormComponent({ type, onSearch, onReset }) {
         web_page: [],
         country: [],
         language: [],
-        keywords: "",
+        keywords: [],
         infoDateFrom: Api.dateToYMD(aWeekAgo),
         infoDateTo: Api.dateToYMD(now)
     };
@@ -185,12 +185,20 @@ export default function SearchFormComponent({ type, onSearch, onReset }) {
                             onChange={(_, opts) => setValue("country", opts.map(o => o.value))}
                         />
 
-                        <TextField
-                            name="any-phrase"
-                            label="Any phrase"
-                            margin="normal"
-                            inputRef={register}
-                            onChange={(event) => setValue("keywords", event.value)}
+                        <AsyncAutocomplete
+                            name="keywords"
+                            collectionName="keywords"
+                            id="keywords"
+                            style={{ width: 300 }}
+                            openOnFocus
+                            fullWidth
+                            multiple
+                            renderInput={(params) =>
+                                <TextField
+                                    {...params}
+                                    inputRef={register}
+                                    label="Key words" margin="normal" />}
+                            onChange={(_, opts) => setValue("keywords", opts.map(o => o.value))}
                         />
 
                     </Grid>

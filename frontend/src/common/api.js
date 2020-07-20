@@ -7,36 +7,14 @@ export default class Api {
         var d = date.getDate();
         var m = date.getMonth() + 1; //Month from 0 to 11
         var y = date.getFullYear();
-        return '' + y + '-' + (m<=9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d);
+        return '' + y + '-' + (m <= 9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d);
     }
 
     static postDocument(type, data) {
         return this._postFormData(type.toLowerCase(), data);
     }
 
-    // static createDataForRow(id, source, infoDate, language, keywords, country) {
-    //     return {
-    //         id: id,
-    //         source: source,
-    //         infoDate: infoDate,
-    //         language: language,
-    //         keywords: keywords,
-    //         country: country
-    //     };
-    // }
-
     static getSearchResults(type, data) {
-
-        // var rows = [
-        //     Api.createDataForRow(1, "International Labour Organization", new Date(1995, 4, 4), "english", "cinemas", "Canada"),
-        //     Api.createDataForRow(2, "Coronavirus Government Response Tracker", new Date(1998, 0, 14), "french", "pubs", "Italy"),
-        //     Api.createDataForRow(3, "Coronavirus Government Response Tracker", new Date(1990, 3, 24), "french", "pubs", "Italy")
-        // ];
-
-        // return new Promise((resolve, reject) => {
-        //     setTimeout(resolve, 100, rows);
-        // });
-
         return this._postJsonData(type.toLowerCase() + '/search', data);
     }
 
@@ -71,11 +49,11 @@ export default class Api {
         });
     }
 
-    static getAutocompleteOptions(collectionName){
+    static getAutocompleteOptions(collectionName) {
         return axios.get(`${this.baseUrl}/autocomplete/${collectionName}`);
     }
 
-    static getDocumentById(documentId){
+    static getDocumentById(documentId) {
         return axios.get(`${this.baseUrl}/documents/${documentId}`);
     }
 }
