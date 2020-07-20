@@ -37,32 +37,44 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
+## Sections
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Legal Act Documents
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+In LAD tab one can search and filter documents. User can specify starting and ending date, website, document's language, country of origin and key phrases. Clicking Search button sends request to `localhost:8000/lad/search` with json body of following format:
 
-### Code Splitting
+```json
+{
+  "country": ["USA"],
+  "infoDateFrom": "2020-07-13",
+  "infoDateTo": "2020-07-20",
+  "keywords": ["School Closing"],
+  "language": ["English", "Chinese"],
+  "web_page": ["google.com", "bing.com"]
+}
+```
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+### Secondary documents
 
-### Analyzing the Bundle Size
+SSD tab serves similar purpose to LAD tab. User can filter secondary documents in the same way as described in LAD section. Clicking Search button sends HTTP POST request to `localhost:8000/ssd/search`.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+### Crawler config
 
-### Making a Progressive Web App
+This section can be used to save crawler parameters and run a crawler. Clicking Run now button sends HTTP POST request to `localhost:8000/crawler/run` with json data in the  following format:
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+```json
+{
+  "day": 20,
+  "dayOfWeek": "Monday",
+  "hour": 13,
+  "infoDateFrom": "Mon Jul 20 2020",
+  "infoDateTo": "Mon Jul 20 2020",
+  "isActive": true,
+  "minutes": 54,
+  "month": 6,
+  "regex": "*.gov",
+  "searchPhrases": ["phrase 1", "phrase 2"]
+}
+```
 
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+Clicking Save button couses sending POST request to `http://localhost:8000/crawler/saveConfig` with the same data as described above.
