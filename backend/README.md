@@ -6,6 +6,12 @@ In order to run a server, run following command
 yarn run start 
 ````
 
+Before running the server for the first time, run command
+```bash
+yarn install
+```
+in order to install required packages.
+
 ## Endpoints
 
 ### Populating ElasticSearch
@@ -49,6 +55,37 @@ Response from server has following structure
         "country": "Poland",
         "source": "Ministerstwo Zdrowia"
     }
+```
+### Running crawler
+
+In order to run crawler one should make POST request to the endpoint `localhost:8000/crawler/run` with following body structure:
+
+```json
+{ 
+  "regex": "dziennikustaw.gov.pl" | "monitorpolski.gov.pl" | "*.gov"
+}
+```
+Regex sent in request's body should have one of the three values specified above. Depending on its value a different crawler task is called — `GovDuSpider`, `GovMpSpider` or `GovCrawler`, respectively. All three crawlers are described in `Crawler` section's README. If a different `regex` field value is provided, `400 Bad request` is returned. If no error occurs while starting the task, `200 OK` response is returned.
+
+Crawler tasks are called via `celery-node` library which posts RabbitMQ messages that invoke Celery tasks.
+
+### Saving crawler configuration
+
+HTTP POST endpoint `localhost:8000/crawler/saveConfig` is prepared for saving crawler configuration. Currently the endpoint is idle — it does nothing and always returns `200 OK` because there is no service resposible for storing and updating crawler configuration. Frontend part of application sends to this endpoint data in the following format:
+
+```json
+{
+  "isActive": true,
+  "minutes": 4,
+  "hour": 1,
+  "day": 20,
+  "month": 6,
+  "dayOfWeek": "Monday" | "Tuesday" | "Wenesday" | "Thursday" | "Friday" | "Saturday" | "Sunday",
+  "searchPhrases": [ "phrase 1", "phrase 2" ],
+  "infoDateFrom": "Mon Jul 20 2020",
+  "infoDateTo": "Mon Jul 20 2020",
+  "regex": "*.gov' 
+}
 ```
 
 ### Tests
